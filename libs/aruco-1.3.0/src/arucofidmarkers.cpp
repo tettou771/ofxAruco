@@ -29,6 +29,7 @@ or implied, of Rafael Muñoz Salinas.
 */
 #include "arucofidmarkers.h"
 #include <cstdio>
+#include <random>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/imgproc/imgproc_c.h>
 using namespace cv;
@@ -43,7 +44,7 @@ namespace aruco {
  ************************************/
 /**
 */
-Mat FiducidalMarkers::createMarkerImage(int id, int size, bool addWaterMark, bool locked) throw(cv::Exception) {
+Mat FiducidalMarkers::createMarkerImage(int id, int size, bool addWaterMark, bool locked) {
     Mat marker(size, size, CV_8UC1);
     marker.setTo(Scalar(0));
     if (0 <= id && id < 1024) {
@@ -102,7 +103,7 @@ Mat FiducidalMarkers::createMarkerImage(int id, int size, bool addWaterMark, boo
 /**
  *
  */
-cv::Mat FiducidalMarkers::getMarkerMat(int id) throw(cv::Exception) {
+cv::Mat FiducidalMarkers::getMarkerMat(int id) {
     Mat marker(5, 5, CV_8UC1);
     marker.setTo(Scalar(0));
     if (0 <= id && id < 1024) {
@@ -130,7 +131,7 @@ cv::Mat FiducidalMarkers::getMarkerMat(int id) throw(cv::Exception) {
  ************************************/
 
 cv::Mat FiducidalMarkers::createBoardImage(Size gridSize, int MarkerSize, int MarkerDistance, BoardConfiguration &TInfo,
-                                           vector< int > *excludedIds) throw(cv::Exception) {
+                                           vector< int > *excludedIds) {
 
 
 
@@ -177,7 +178,7 @@ cv::Mat FiducidalMarkers::createBoardImage(Size gridSize, int MarkerSize, int Ma
  *
  ************************************/
 cv::Mat FiducidalMarkers::createBoardImage_ChessBoard(Size gridSize, int MarkerSize, BoardConfiguration &TInfo, bool centerData,
-                                                      vector< int > *excludedIds) throw(cv::Exception) {
+                                                      vector< int > *excludedIds) {
 
 
     srand(cv::getTickCount());
@@ -240,7 +241,7 @@ cv::Mat FiducidalMarkers::createBoardImage_ChessBoard(Size gridSize, int MarkerS
  *
  ************************************/
 cv::Mat FiducidalMarkers::createBoardImage_Frame(Size gridSize, int MarkerSize, int MarkerDistance, BoardConfiguration &TInfo, bool centerData,
-                                                 vector< int > *excludedIds) throw(cv::Exception) {
+                                                 vector< int > *excludedIds) {
 
 
 
@@ -473,7 +474,7 @@ int FiducidalMarkers::detect(const Mat &in, int &nRotations) {
         return -1;*/
 }
 
-vector< int > FiducidalMarkers::getListOfValidMarkersIds_random(int nMarkers, vector< int > *excluded) throw(cv::Exception) {
+vector< int > FiducidalMarkers::getListOfValidMarkersIds_random(int nMarkers, vector< int > *excluded) {
 
     if (excluded != NULL)
         if (nMarkers + excluded->size() > 1024)
@@ -488,7 +489,7 @@ vector< int > FiducidalMarkers::getListOfValidMarkersIds_random(int nMarkers, ve
         for (size_t i = 0; i < excluded->size(); i++)
             listOfMarkers[excluded->at(i)] = -1;
     // random shuffle
-    random_shuffle(listOfMarkers.begin(), listOfMarkers.end());
+    std::shuffle(listOfMarkers.begin(), listOfMarkers.end(), std::mt19937{std::random_device{}()});
     // now, take the first  nMarkers elements with value !=-1
     int i = 0;
     vector< int > retList;
