@@ -1,4 +1,4 @@
-*.DS_* 
+*.DS_*
 example/bin/example*
 example/obj
 example/bin/libs
@@ -11,3 +11,5 @@ example/.vs/example/v16/.suo
 *.dll
 *.filters
 *.user
+example/bin/data/marker*.png
+example/bin/data/board*.png

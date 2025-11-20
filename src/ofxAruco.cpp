@@ -8,6 +8,7 @@
 #include "ofxOpenCv.h"
 #include "ofxCv.h"
 #include "ofxAruco.h"
+#include "arucofidmarkers.h"
 
 ofxAruco::ofxAruco()
 :threaded(true)
@@ -367,6 +368,11 @@ void ofxAruco::beginBoard(int boardnum) {
 		matrixf[i] = matrix[i];
 	}
 
+	// Z軸の向きだけを反転（回転のみ、位置は変更しない）
+	matrixf[8] = -matrixf[8];   // R13 (X軸のZ成分)
+	matrixf[9] = -matrixf[9];   // R23 (Y軸のZ成分)
+	matrixf[10] = -matrixf[10]; // R33 (Z軸のZ成分)
+
 	glMatrixMode( GL_MODELVIEW );
 	glPushMatrix();
 
@@ -429,8 +435,8 @@ void ofxAruco::getBoardImage(ofPixels & pixels){
 }
 
 void ofxAruco::getMarkerImage(int markerID, int size, ofPixels & pixels){
-	/*cv::Mat m = aruco::Marker::createMarkerImage(markerID,size);
-	 pixels.setFromPixels(m.data,size,size,OF_IMAGE_GRAYSCALE);*/
+	cv::Mat m = aruco::FiducidalMarkers::createMarkerImage(markerID, size);
+	pixels.setFromPixels(m.data, size, size, OF_IMAGE_GRAYSCALE);
 }
 
 void ofxAruco::getThresholdImage(ofPixels & pixels){

@@ -7,7 +7,7 @@ void drawMarker(float size, const ofColor & color){
 	ofPushMatrix();
 		// move up from the center by size*.5
 		// to draw a box centered at that point
-		ofTranslate(0,size*0.5,0);
+		ofTranslate(0,0,size*0.5);
 		ofFill();
 		ofSetColor(color,50);
 		ofDrawBox(size);
@@ -102,7 +102,8 @@ void ofApp::keyPressed(int key){
 	if (key >= '0' && key <= '9') {
 		// there's 1024 different markers
 		int markerID = key - '0';
-		aruco.getMarkerImage(markerID, 240, marker);
+		aruco.getMarkerImage(markerID, 240, marker.getPixels());
+		marker.update();
 		marker.save("marker" + ofToString(markerID) + ".png");
 	}
 }
