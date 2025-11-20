@@ -11,5 +11,3 @@ example/.vs/example/v16/.suo
 *.dll
 *.filters
 *.user
-example/bin/data/marker*.png
-example/bin/data/board*.png
